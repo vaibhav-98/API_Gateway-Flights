@@ -8,13 +8,13 @@ const userRepo = new UserRepository()
 async function create(data) {
     try {
         const user = await userRepo.create(data);
-        console.log("user", user);
+       // console.log("user", user);
         
         //const role = await roleRepo.getRoleByName(Enums.USER_ROLES_ENUMS.CUSTOMER);
         //user.addRole(role);
         return user;
     } catch(error) {
-        console.log(error.name);
+       // console.log(error.name);
         if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
             let explanation = [];
             error.errors.forEach((err) => {

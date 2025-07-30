@@ -11,14 +11,14 @@ const { SuccessResponse, ErrorResponse } = require("../utils/common");
  */
 
 async function singup(req,res) {
-     console.log(req.body);
+     //console.log(req.body);
      
     try {
         const user = await UserService.create({
             email:req.body.email,
             password: req.body.password
         })
-        console.log("user >", user);
+      //  console.log("user >", user);
         
         SuccessResponse.data = user
         return res 
