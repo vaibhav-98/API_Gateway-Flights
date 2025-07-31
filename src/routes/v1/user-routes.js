@@ -4,6 +4,8 @@ const { UserController } = require('../../controllers');
 
 const router = express.Router();
 
-router.post ('/', UserController.singup )
+router.post ('/singup', UserController.singup )
+
+router.post ('/singin', UserController.singin )
 
 module.exports = router;
