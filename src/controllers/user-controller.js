@@ -54,7 +54,32 @@ async function singin(req,res) {
     }
 }
 
+
+
+async function addRoleToUser(req,res) {
+        console.log(req.body);
+        
+    try {
+        const user = await UserService.addRoleToUser({
+            role:req.body.role,
+           id: req.body.id
+        })
+        
+        SuccessResponse.data = user
+        return res 
+                  .status(StatusCodes.CREATED)
+                  .json(SuccessResponse)
+    } catch (error) {
+        ErrorResponse.error = error;
+        return res 
+                  .status(error.statusCode)
+                  .json(ErrorResponse)
+    }
+}
+
+
 module.exports = {
     singup,
-    singin
+    singin,
+    addRoleToUser
 }

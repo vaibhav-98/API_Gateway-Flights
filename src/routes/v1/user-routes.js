@@ -9,4 +9,6 @@ router.post ('/singup', AuthRequestMiddleware.validateAuthRequest ,UserControlle
 
 router.post ('/singin', AuthRequestMiddleware.validateAuthRequest ,UserController.singin )
 
+router.post('/role',AuthRequestMiddleware.checkAuth, AuthRequestMiddleware.isAdmin ,UserController.addRoleToUser)
+
 module.exports = router;
