@@ -125,5 +125,5 @@ async function isAdmin(id) {
     singIn,
     isAuthenticated,
     addRoleToUser,
-    isAdmin
+    isAdmin,
  }
