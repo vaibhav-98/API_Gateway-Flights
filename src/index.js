@@ -1,15 +1,17 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit')
 const {createProxyMiddleware} = require('http-proxy-middleware')
+const cors = require('cors');
 
 const { ServerConfig } = require('./config');
 const apiRoutes = require('./routes');
 
 const app = express();
 
+
 const limiter = rateLimit({
     windowMs: 2 * 60 * 1000, // 2 minutes
-    max: 3, // Limit each IP to 2 requests per 'window' {}
+    max: 10, // Limit each IP to 10 requests per 'window' {}
 });
 
 app.use(express.json())
@@ -30,6 +32,7 @@ app.use('/bookingService', createProxyMiddleware({target: ServerConfig.BOOKING_S
 app.listen(ServerConfig.PORT, () => {
     console.log(`Successfully started the server on PORT : ${ServerConfig.PORT}`);
 });
+
 
 /**
  * user

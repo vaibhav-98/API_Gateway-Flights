@@ -15,8 +15,10 @@ async function singup(req,res) {
      
     try {
         const user = await UserService.create({
-            email:req.body.email,
-            password: req.body.password
+           email: req.body.email,
+           password: req.body.password,
+           name: req.body.name,         // new
+           phNumber: req.body.phNumber  // new
         })
       //  console.log("user >", user);
         
@@ -78,8 +80,24 @@ async function addRoleToUser(req,res) {
 }
 
 
+
+async function getUserById(req, res) {
+  try {
+    const user = await UserService.getUserById(req.params.id);
+    SuccessResponse.data = user;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+}
+
+
 module.exports = {
     singup,
     singin,
-    addRoleToUser
+    addRoleToUser,
+    getUserById
 }

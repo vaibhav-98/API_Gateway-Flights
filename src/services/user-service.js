@@ -31,6 +31,8 @@ async function create(data) {
 }
 
 async function singIn(data) {
+     console.log("data API Gateway>>>", data);
+     
     try {
         const user = await userRepo.getUserByEmail(data.email);
         if(!user) {
@@ -58,10 +60,12 @@ async function isAuthenticated(token){
         }
         const response = Auth.veryfyToken(token);
         const user = await userRepo.get(response.id);
+       
+        
         if(!user){
             throw new AppError('No user found', StatusCodes.NOT_FOUND)
         }
-        return user.id
+        return { id: user.id, email: user.email, role: user.role }; // send full user info
     } catch (error) {
          if(error instanceof AppError) throw error
          if(error.name == 'jsonWebTokenError'){
@@ -120,10 +124,20 @@ async function isAdmin(id) {
 }
 
 
+async function getUserById(id) {
+  const user = await userRepo.get(id);
+  if (!user) throw new AppError("User not found", StatusCodes.NOT_FOUND);
+  return user;
+}
+
+
+
  module.exports = {
     create,
     singIn,
     isAuthenticated,
     addRoleToUser,
     isAdmin,
+    getUserById
  }
+ 
