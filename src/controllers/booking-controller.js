@@ -42,7 +42,7 @@ async function createBooking(req, res) {
 
 
 async function makePayment(req, res) {
-  console.log("user", req.user);
+  //console.log("user", req.user);
 
   try {
     // Auto-generate idempotency key if client didn’t send one
