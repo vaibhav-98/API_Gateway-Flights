@@ -1,5 +1,6 @@
 const axios = require('axios');
 const dotenv = require('dotenv');
+const { v4: uuidv4 } = require('uuid');
 
 const { StatusCodes } = require("http-status-codes");
 
@@ -42,11 +43,17 @@ async function createBooking(req, res) {
 
 async function makePayment(req, res) {
   console.log("user", req.user);
-   //console.log("data", req.data)
 
   try {
+    // Auto-generate idempotency key if client didn’t send one
+    let idempotencyKey = req.headers['x-idempotency-key'];
+    if (!idempotencyKey) {
+      idempotencyKey = uuidv4();
+      res.setHeader('x-idempotency-key', idempotencyKey); // send back to client
+    }
+
     const response = await axios.post(
-      `${BOOKING_SERVICE_URL}/api/v1/bookings/payments`, 
+      `${BOOKING_SERVICE_URL}/api/v1/bookings/payments`,
       {
         bookingId: req.body.bookingId,
         totalCost: req.body.totalCost,
@@ -54,18 +61,21 @@ async function makePayment(req, res) {
       },
       {
         headers: {
-          'x-idempotency-key': req.headers['x-idempotency-key']
-        }
+          'x-idempotency-key': idempotencyKey,
+        },
       }
     );
 
     return res.status(response.status).json(response.data);
   } catch (error) {
+    console.error("API Gateway Payment Error:", error.message);
     return res
       .status(error.response?.status || 500)
       .json(error.response?.data || { error: error.message });
   }
 }
+
+
 
 module.exports = { 
   makePayment,
